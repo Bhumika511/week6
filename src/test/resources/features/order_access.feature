@@ -1,4 +1,6 @@
-@smoke
+@api
+@negative
+@security
 Feature: Order access
 
   Scenario: A user cannot access another user's order

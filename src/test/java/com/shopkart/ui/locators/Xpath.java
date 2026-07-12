@@ -12,9 +12,13 @@ public class Xpath {
         public static final String CHECKOUT = "//button[text()='Checkout']";
         public static final String PLACE_ORDER = "//button[text()='Place order']";
         public static final String ADDRESS = "//textarea[@id='address']";
+    public static final String SEARCH_BUTTON =
+            "//button[@type='submit' and normalize-space()='Search']";
     public static final String EMAIL =
             "//input[@id='email']";
-
+    public static String productName(String productName) {
+        return "//*[normalize-space()='" + productName + "']";
+    }
     public static final String PASSWORD =
             "//input[@id='password']";
 

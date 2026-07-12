@@ -31,8 +31,13 @@ public class HomePage {
         return this;
     }
 
+    public HomePage verifyProduct(String productName) {
+
+        productCard.verifyProduct(productName);
+
+        return this;
+    }
     public boolean isDisplayed() {
-//        return $x(Xpath.SEARCH).isDisplayed();
         $x(Xpath.SEARCH).shouldBe(visible);
         return true;
     }

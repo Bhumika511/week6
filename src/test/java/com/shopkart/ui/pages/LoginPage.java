@@ -9,10 +9,6 @@ import static com.codeborne.selenide.Selenide.open;
 public class LoginPage {
     public LoginPage openLoginPage() {
         open("/login");
-
-        System.out.println("Current URL: " + WebDriverRunner.url());
-        System.out.println(com.codeborne.selenide.WebDriverRunner.source());
-
         return this;
     }
 
@@ -28,7 +24,6 @@ public class LoginPage {
 
     public HomePage clickLogin() {
         $x(Xpath.LOGIN_BUTTON).click();
-        System.out.println("After Login URL : " + WebDriverRunner.url());
         return new HomePage();
     }
 

@@ -13,6 +13,8 @@ public class CartPage {
     }
 
     public CheckoutPage checkout() {
+        $x(Xpath.CHECKOUT).click();
+
         return new CheckoutPage();
     }
 }

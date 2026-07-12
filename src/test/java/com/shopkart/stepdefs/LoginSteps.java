@@ -16,10 +16,14 @@ import org.junit.jupiter.api.Assertions;
 public class LoginSteps extends BaseUiTest {
 
     private final Authclient authClient = new Authclient();
-    private final WorldContext context = new WorldContext();
+    private final WorldContext context;
 
     private LoginPage loginPage;
     private HomePage homePage;
+
+    public LoginSteps(WorldContext context) {
+        this.context = context;
+    }
 
     @Given("{string} opens the ShopKart login page")
     public void userOpensShopKartApplication(String user) {

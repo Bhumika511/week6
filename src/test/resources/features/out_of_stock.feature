@@ -1,4 +1,6 @@
 @smoke
+@api
+@negative
 Feature: Out of stock
 
   Scenario: Adding too many items returns a bad request

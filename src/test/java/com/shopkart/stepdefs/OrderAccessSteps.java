@@ -20,7 +20,6 @@ public class OrderAccessSteps {
     private final Authclient authClient = new Authclient();
     private final CartClient cartClient = new CartClient();
     private final OrderClient orderClient = new OrderClient();
-    private int statusCode;
 
     public OrderAccessSteps(WorldContext context) {
         this.context = context;
@@ -28,31 +27,76 @@ public class OrderAccessSteps {
 
     @Given("Alice has placed an order")
     public void aliceHasPlacedAnOrder() {
+
         LoginResponse alice = authClient.loginAsAlice();
+
         context.setToken(alice.token());
         context.setCustomerId(alice.customerId());
 
         Cart cart = cartClient.createCart(alice.token());
-        cartClient.addItem(alice.token(), cart.cartId(), TestData.BAG_SKU, 1);
+        context.setCartId(cart.cartId());
 
-        Order order = orderClient.placeOrder(alice.token(), cart.cartId(), TestData.DEFAULT_ADDRESS);
+        cartClient.addItem(
+                alice.token(),
+                cart.cartId(),
+                TestData.BAG_SKU,
+                1
+        );
+
+        Order order = orderClient.placeOrder(
+                alice.token(),
+                cart.cartId(),
+                TestData.DEFAULT_ADDRESS
+        );
+
         context.setOrderId(order.id());
     }
-
     @When("Bob requests that order through the API")
-    public void bobRequestsOrder() {
+    public void bobRequestsThatOrderThroughTheAPI() {
+
         LoginResponse bob = authClient.loginAsBob();
 
-        context.setResponseStatus(
-                orderClient.getOrderStatusCode(
-                        bob.token(),
-                        context.getOrderId()
-                )
+        int status = orderClient.getOrderStatusCode(
+                bob.token(),
+                context.getOrderId()
+        );
+
+        context.setResponseStatus(status);
+    }
+    @When("Alice cancels the order")
+    public void aliceCancelsTheOrder() {
+
+        orderClient.cancelOrder(
+                context.getToken(),
+                context.getOrderId()
         );
     }
 
+    @Then("the order status should become {string}")
+    public void orderStatusShouldBecome(String expectedStatus) {
+
+        Order order = orderClient.getOrder(
+                context.getToken(),
+                context.getOrderId()
+        );
+
+        assertEquals(expectedStatus, order.status());
+    }
+
+    @When("Alice cancels the same order again")
+    public void aliceCancelsTheSameOrderAgain() {
+
+        int status = orderClient.cancelOrderStatusCode(
+                context.getToken(),
+                context.getOrderId()
+        );
+
+        context.setResponseStatus(status);
+    }
+
     @Then("the response status should be {int}")
-    public void verifyStatus(int expectedStatus) {
+    public void responseStatusShouldBe(int expectedStatus) {
+
         assertEquals(expectedStatus, context.getResponseStatus());
     }
 }

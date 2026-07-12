@@ -11,6 +11,8 @@ public class CheckoutPage {
     }
 
     public OrderPage placeOrder() {
+        $x(Xpath.PLACE_ORDER).click();
+
         return new OrderPage();
     }
 }

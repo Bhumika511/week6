@@ -1,4 +1,5 @@
 @smoke
+@ui
 Feature: Login
 
   Scenario: Alice logs into ShopKart successfully

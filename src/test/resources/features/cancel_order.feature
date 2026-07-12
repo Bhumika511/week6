@@ -1,8 +1,11 @@
 @negative
+@api
 Feature: Cancel order
 
   Scenario: A user cancels an order
     Given Alice has placed an order
-    When Bob requests that order through the API
-    Then the response status should be 403
+    When Alice cancels the order
+    Then the order status should become "CANCELLED"
+    When Alice cancels the same order again
+    Then the response status should be 409
 

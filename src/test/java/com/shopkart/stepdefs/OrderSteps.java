@@ -49,11 +49,13 @@ public class OrderSteps {
 
     @When("User searches for {string}")
     public void userSearches(String product) {
+
         context.getHomePage().search(product);
     }
 
     @When("User adds the product to cart")
     public void userAddsProduct() {
+        context.getHomePage().addProduct();
         Cart cart = cartClient.createCart(context.getToken());
         context.setCartId(cart.cartId());
         cartClient.addItem(context.getToken(), cart.cartId(), TestData.BAG_SKU, 1);
@@ -66,14 +68,35 @@ public class OrderSteps {
 
     @When("User proceeds to checkout")
     public void userCheckout() {
-        context.setCheckoutPage(context.getCartPage().checkout());
-        context.setOrderPage(context.getCheckoutPage().placeOrder());
+        context.setCartPage(
+                context.getHomePage().openCart()
+        );
+
+        context.setCheckoutPage(
+                context.getCartPage()
+                        .checkout()
+        );
+
+        context.setOrderPage(
+                context.getCheckoutPage()
+                        .enterAddress(TestData.DEFAULT_ADDRESS)
+                        .placeOrder()
+        );
+
+        context.setOrderId(
+                context.getOrderPage().getOrderId()
+        );
     }
 
     @Then("Order should be placed successfully")
     public void orderPlaced() {
-        Order order = orderClient.placeOrder(context.getToken(), context.getCartId(), TestData.DEFAULT_ADDRESS);
-        context.setOrderId(order.id());
+        context.getOrderPage().verifyOrderPlaced();
+
+        Order order = orderClient.getOrder(
+                context.getToken(),
+                context.getOrderId()
+        );
+
         assertNotNull(order);
         assertEquals("PLACED", order.status());
     }

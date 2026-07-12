@@ -1,4 +1,5 @@
-@smoke
+@api
+@db
 Feature: Cart total
 
   Scenario: API and database cart totals match
