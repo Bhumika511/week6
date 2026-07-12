@@ -5,6 +5,7 @@ import com.shopkart.api.model.Order;
 import com.shopkart.data.TestData;
 import com.shopkart.data.db.OrderRepository;
 import com.shopkart.support.WorldContext;
+import com.shopkart.ui.pages.CheckoutPage;
 import com.shopkart.ui.pages.OrderPage;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -42,20 +43,18 @@ public class CheckoutSteps {
     @When("she checks out with a valid address")
     public void sheChecksOutWithAValidAddress() {
 
-        context.setCheckoutPage(
-                context.getCartPage().checkout()
-        );
+        CheckoutPage checkoutPage =
+                context.getCartPage().checkout();
 
-        context.getCheckoutPage()
-                .enterAddress(TestData.DEFAULT_ADDRESS);
+        context.setCheckoutPage(checkoutPage);
 
-        OrderPage orderPage = context.getCheckoutPage()
-                .placeOrder();
+        checkoutPage.enterAddress(TestData.DEFAULT_ADDRESS);
+
+        OrderPage orderPage = checkoutPage.placeOrder();
 
         context.setOrderPage(orderPage);
         context.setOrderId(orderPage.getOrderId());
     }
-
     @Then("the order confirmation shows status {string}")
     public void orderConfirmationShowsStatus(String status) {
 
