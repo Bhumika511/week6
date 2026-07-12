@@ -43,12 +43,15 @@ jobs:
           cp src/test/resources/environment.properties \
              build/allure-results/environment.properties
 
+      # First deployment will not have gh-pages branch
       - name: Checkout gh-pages branch
         if: always()
+        continue-on-error: true
         uses: actions/checkout@v4
         with:
           ref: gh-pages
           path: gh-pages
+          fetch-depth: 0
 
       - name: Generate Allure Report
         if: always()
@@ -66,3 +69,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-history
+          force_orphan: true
