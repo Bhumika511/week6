@@ -8,20 +8,23 @@ on:
 permissions:
   contents: write
 
-
 jobs:
-
   allure-report:
-
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      - name: Checkout gh-pages branch
+        if: always()
+        continue-on-error: true
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -30,17 +33,14 @@ jobs:
           java-version: 22
           cache: gradle
 
-
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-
       - name: Run Tests
+        continue-on-error: true
         run: |
           chmod +x gradlew
           ./gradlew reporting --no-configuration-cache
-        continue-on-error: true
-
 
       - name: Copy Allure Environment
         if: always()
@@ -48,23 +48,23 @@ jobs:
           mkdir -p build/allure-results
           cp src/test/resources/environment.properties build/allure-results/environment.properties || true
 
-
       - name: Generate Allure Report
         if: always()
         uses: simple-elf/allure-report-action@master
         with:
+          gh_pages: gh-pages
           allure_results: build/allure-results
           allure_report: allure-report
           allure_history: allure-history
 
-
-      # Debug folder before deployment
-      - name: Check Allure History
+      - name: Check Generated Report
         if: always()
         run: |
-          ls -la
-          ls -la allure-history
+          echo "=== allure-history ==="
+          ls -R allure-history || true
 
+          echo "=== history ==="
+          ls -R allure-history/history || true
 
       - name: Deploy Allure Report
         if: always()
@@ -73,4 +73,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: ./allure-history
-          force_orphan: true
