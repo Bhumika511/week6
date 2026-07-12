@@ -32,6 +32,9 @@ public class HomePage {
     }
 
     public boolean isDisplayed() {
-        return $x(Xpath.SEARCH).isDisplayed();
+//        return $x(Xpath.SEARCH).isDisplayed();
+        $x(Xpath.SEARCH).shouldBe(visible);
+        return true;
     }
+
 }

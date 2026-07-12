@@ -28,6 +28,7 @@ public class LoginPage {
 
     public HomePage clickLogin() {
         $x(Xpath.LOGIN_BUTTON).click();
+        System.out.println("After Login URL : " + WebDriverRunner.url());
         return new HomePage();
     }
 
