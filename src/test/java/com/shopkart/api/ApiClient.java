@@ -10,7 +10,7 @@ public class ApiClient {
 
             return RestAssured
                     .given()
-                    .baseUri(AppConfig.get("api.url"))
+                    .baseUri(AppConfig.API_BASE_URL)
                     .contentType("application/json");
 
         }

@@ -1,3 +1,4 @@
+@smoke
 Feature: Order
 
   Scenario: Customer places an order

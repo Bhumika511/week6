@@ -1,57 +1,57 @@
 package com.shopkart.api;
 
-import com.shopkart.config.AppConfig;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
+import com.shopkart.api.base.BaseApiClient;
+import com.shopkart.api.model.Order;
+import com.shopkart.api.model.PlaceOrderRequest;
 
-import java.util.Map;
+public class OrderClient extends BaseApiClient {
 
-import static io.restassured.RestAssured.given;
-
-public class OrderClient {
-
-
-        public OrderClient() {
-
-            RestAssured.baseURI =
-                    AppConfig.get("api.url");
-
+        public Order placeOrder(String token, long cartId, String address) {
+                return authorized(token)
+                                .body(new PlaceOrderRequest(cartId, address))
+                                .when()
+                                .post("/orders")
+                                .then()
+                                .spec(ApiSpec.createdResponse())
+                                .extract()
+                                .as(Order.class);
         }
 
-    public Response createOrder(String token, int cartId) {
-
-        return given()
-                .header("Authorization", "Bearer " + token)
-                .contentType(ContentType.JSON)
-                .body(Map.of(
-                        "cartId", cartId,
-                        "address", "123 MG Road, Bangalore, Karnataka"
-                ))
-                .when()
-                .post("/orders");
-    }
-
-        public Response getOrder(String token,
-                                 int orderId) {
-
-            return given()
-                    .header("Authorization",
-                            "Bearer " + token)
-                    .when()
-                    .get("/orders/" + orderId);
-
+        public Order getOrder(String token, long orderId) {
+                return authorized(token)
+                                .when()
+                                .get("/orders/{id}", orderId)
+                                .then()
+                                .spec(ApiSpec.okResponse())
+                                .extract()
+                                .as(Order.class);
         }
 
-        public Response cancelOrder(String token,
-                                    int orderId) {
-
-            return given()
-                    .header("Authorization",
-                            "Bearer " + token)
-                    .when()
-                    .post("/orders/" + orderId + "/cancel");
-
+        public int getOrderStatusCode(String token, long orderId) {
+                return authorized(token)
+                                .when()
+                                .get("/orders/{id}", orderId)
+                                .then()
+                                .extract()
+                                .statusCode();
         }
 
-    }
+        public Order cancelOrder(String token, long orderId) {
+                return authorized(token)
+                                .when()
+                                .post("/orders/{id}/cancel", orderId)
+                                .then()
+                                .spec(ApiSpec.okResponse())
+                                .extract()
+                                .as(Order.class);
+        }
+
+        public int cancelOrderStatusCode(String token, long orderId) {
+                return authorized(token)
+                                .when()
+                                .post("/orders/{id}/cancel", orderId)
+                                .then()
+                                .extract()
+                                .statusCode();
+        }
+}

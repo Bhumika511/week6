@@ -12,31 +12,26 @@ public class HomePage {
     private final ProductCard productCard = new ProductCard();
 
     public HomePage search(String product) {
-
         productCard.searchProduct(product);
-
         return this;
     }
 
     public HomePage addProduct() {
-
         productCard.addToCart();
-
         return this;
     }
 
     public CartPage openCart() {
-
         header.openCart();
-
         return new CartPage();
     }
+
     public HomePage verifyHomePage() {
-
         $x(Xpath.SEARCH).shouldBe(visible);
-
         return this;
     }
 
-
+    public boolean isDisplayed() {
+        return $x(Xpath.SEARCH).isDisplayed();
+    }
 }

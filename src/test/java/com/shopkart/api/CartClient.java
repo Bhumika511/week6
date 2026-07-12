@@ -1,52 +1,49 @@
 package com.shopkart.api;
 
-import com.shopkart.config.AppConfig;
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
+import com.shopkart.api.base.BaseApiClient;
+import com.shopkart.api.model.AddItemRequest;
+import com.shopkart.api.model.Cart;
 
-import java.util.Map;
+public class CartClient extends BaseApiClient {
 
-import static io.restassured.RestAssured.given;
-
-public class CartClient {
-
-
-        public CartClient() {
-            RestAssured.baseURI = AppConfig.get("api.url");
+        public Cart createCart(String token) {
+                return authorized(token)
+                                .when()
+                                .post("/carts")
+                                .then()
+                                .spec(ApiSpec.createdResponse())
+                                .extract()
+                                .as(Cart.class);
         }
 
-        public Response createCart(String token) {
-
-            return given()
-                    .header("Authorization", "Bearer " + token)
-                    .when()
-                    .post("/carts");
-
+        public Cart addItem(String token, long cartId, String sku, int qty) {
+                return authorized(token)
+                                .body(new AddItemRequest(sku, qty))
+                                .when()
+                                .post("/carts/{id}/items", cartId)
+                                .then()
+                                .spec(ApiSpec.okResponse())
+                                .extract()
+                                .as(Cart.class);
         }
 
-        public Response getCart(String token, int cartId) {
-
-            return given()
-                    .header("Authorization", "Bearer " + token)
-                    .when()
-                    .get("/carts/" + cartId);
-
+        public int addItemStatusCode(String token, long cartId, String sku, int qty) {
+                return authorized(token)
+                                .body(new AddItemRequest(sku, qty))
+                                .when()
+                                .post("/carts/{id}/items", cartId)
+                                .then()
+                                .extract()
+                                .statusCode();
         }
 
-    public Response addItem(String token,
-                            int cartId,
-                            String sku,
-                            int qty) {
-
-        return given()
-                .header("Authorization", "Bearer " + token)
-                .contentType("application/json")
-                .body(Map.of(
-                        "sku", sku,
-                        "qty", qty
-                ))
+    public Cart getCart(String token, long cartId) {
+        return authorized(token)
                 .when()
-                .post("/carts/" + cartId + "/items");
+                .get("/carts/{id}", cartId)
+                .then()
+                .log().all()
+                .extract()
+                .as(Cart.class);
     }
-
-    }
+}

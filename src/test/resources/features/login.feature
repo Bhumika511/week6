@@ -1,8 +1,8 @@
+@smoke
 Feature: Login
 
-  Scenario: Successful login
+  Scenario: Alice logs into ShopKart successfully
 
-    Given user opens ShopKart application
-    When user enters valid email and password
-    And user clicks Login button
-    Then Home page should be displayed
+    Given "alice" opens the ShopKart login page
+    When "alice" logs in
+    Then she should be redirected to the home page
