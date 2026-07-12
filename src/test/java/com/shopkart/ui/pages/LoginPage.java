@@ -32,8 +32,10 @@ public class LoginPage {
     }
 
     public HomePage login(String email, String password) {
-        enterEmail(email);
-        enterPassword(password);
-        return clickLogin();
+        return openLoginPage()
+                .enterEmail(email)
+                .enterPassword(password)
+                .clickLogin();
+
     }
 }

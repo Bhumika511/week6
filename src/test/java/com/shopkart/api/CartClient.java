@@ -42,7 +42,7 @@ public class CartClient extends BaseApiClient {
                 .when()
                 .get("/carts/{id}", cartId)
                 .then()
-                .log().all()
+                .spec(ApiSpec.okResponse())
                 .extract()
                 .as(Cart.class);
     }

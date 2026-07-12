@@ -30,6 +30,7 @@ dependencies {
     testImplementation("io.qameta.allure:allure-junit5:2.35.1")
     testImplementation("com.mysql:mysql-connector-j:9.4.0")
     testImplementation("io.github.cdimascio:dotenv-java:3.2.0")
+    testImplementation("com.fasterxml.jackson.core:jackson-databind:2.18.2")
 
 }
 

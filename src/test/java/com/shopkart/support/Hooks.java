@@ -11,7 +11,6 @@ public class Hooks {
 
     @Before
     public void beforeScenario() {
-        LocalShopkartStub.ensureStarted();
         Configuration.baseUrl = AppConfig.BASE_URL;
         Configuration.browser = AppConfig.BROWSER;
         Configuration.timeout = AppConfig.TIMEOUT;

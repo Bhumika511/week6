@@ -63,7 +63,6 @@ public class CartSteps {
         context.setOrderId(order.id());
         assertEquals(status, order.status());
     }
-
     @Then("GET order should return status {string}")
     public void getOrderShouldReturnStatus(String status) {
         Order order = orderClient.getOrder(context.getToken(), context.getOrderId());

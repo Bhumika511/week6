@@ -16,38 +16,47 @@ public class OrderRepository extends DatabaseSupport {
         ORDER_STATUS_BY_ID.put(orderId, status);
         PLACED_ORDERS_BY_CUSTOMER.merge(customerId, status.equals("PLACED") ? 1 : 0, Integer::sum);
     }
-
     public boolean orderExists(long orderId) {
-        if (ORDER_STATUS_BY_ID.containsKey(orderId)) {
-            return true;
-        }
+
         try (
                 Connection connection = connection();
-                PreparedStatement statement = connection.prepareStatement(Queries.FIND_ORDER_BY_ID)) {
+                PreparedStatement statement =
+                        connection.prepareStatement(Queries.FIND_ORDER_BY_ID)
+        ) {
+
             statement.setLong(1, orderId);
+
             ResultSet result = statement.executeQuery();
+
             return result.next();
+
         } catch (SQLException e) {
-            return false;
+
+            throw new RuntimeException(e);
         }
     }
 
     public String orderStatus(long orderId) {
-        String status = ORDER_STATUS_BY_ID.get(orderId);
-        if (status != null) {
-            return status;
-        }
+
         try (
                 Connection connection = connection();
-                PreparedStatement statement = connection.prepareStatement(Queries.FIND_ORDER_STATUS)) {
+                PreparedStatement statement =
+                        connection.prepareStatement(Queries.FIND_ORDER_STATUS)
+        ) {
+
             statement.setLong(1, orderId);
+
             ResultSet result = statement.executeQuery();
+
             if (result.next()) {
                 return result.getString("status");
             }
+
             return null;
+
         } catch (SQLException e) {
-            return null;
+
+            throw new RuntimeException(e);
         }
     }
 
