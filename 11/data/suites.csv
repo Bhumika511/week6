@@ -1,0 +1,5 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"Verify required categories exist.","2","requiredCategoriesShouldExist()","","2026-07-12","passed","2026-07-12","","com.shopkart.reporting.ReportingConfigTest","com.shopkart.reporting.ReportingConfigTest","requiredCategoriesShouldExist"
+"Specific categories should appear before generic category.","28","specificCategoriesShouldComeBeforeOtherFailures()","","2026-07-12","passed","2026-07-12","","com.shopkart.reporting.ReportingConfigTest","com.shopkart.reporting.ReportingConfigTest","specificCategoriesShouldComeBeforeOtherFailures"
+"Verify important regex patterns exist.","4","regexPatternsShouldExist()","","2026-07-12","passed","2026-07-12","","com.shopkart.reporting.ReportingConfigTest","com.shopkart.reporting.ReportingConfigTest","regexPatternsShouldExist"
+"Verify categories.json exists.","1","categoriesFileShouldExist()","","2026-07-12","passed","2026-07-12","","com.shopkart.reporting.ReportingConfigTest","com.shopkart.reporting.ReportingConfigTest","categoriesFileShouldExist"
