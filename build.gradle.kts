@@ -1,7 +1,7 @@
 plugins {
-    id("java")
+    java
+    id("io.qameta.allure") version "2.12.0"
 }
-
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
