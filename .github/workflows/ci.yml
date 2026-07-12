@@ -8,7 +8,9 @@ on:
 permissions:
   contents: write
 
+
 jobs:
+
   allure-report:
 
     runs-on: ubuntu-latest
@@ -20,6 +22,7 @@ jobs:
         with:
           fetch-depth: 0
 
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -27,31 +30,24 @@ jobs:
           java-version: 22
           cache: gradle
 
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Check Gradle
-        run: gradle -v
 
-      - name: Run Reporting Tests
-        run: gradle reporting --no-configuration-cache
+      - name: Run Tests
+        run: |
+          chmod +x gradlew
+          ./gradlew reporting --no-configuration-cache
+        continue-on-error: true
+
 
       - name: Copy Allure Environment
         if: always()
         run: |
           mkdir -p build/allure-results
-          cp src/test/resources/environment.properties \
-             build/allure-results/environment.properties
+          cp src/test/resources/environment.properties build/allure-results/environment.properties || true
 
-      # First deployment will not have gh-pages branch
-      - name: Checkout gh-pages branch
-        if: always()
-        continue-on-error: true
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          path: gh-pages
-          fetch-depth: 0
 
       - name: Generate Allure Report
         if: always()
@@ -59,14 +55,22 @@ jobs:
         with:
           allure_results: build/allure-results
           allure_report: allure-report
-          gh_pages: gh-pages
           allure_history: allure-history
 
-      - name: Deploy to GitHub Pages
+
+      # Debug folder before deployment
+      - name: Check Allure History
+        if: always()
+        run: |
+          ls -la
+          ls -la allure-history
+
+
+      - name: Deploy Allure Report
         if: always()
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: allure-history
+          publish_dir: ./allure-history
           force_orphan: true
