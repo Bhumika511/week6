@@ -44,7 +44,7 @@ public class ReportingConfigTest {
 
             assertAll(
 
-                    () -> assertTrue(categories.contains("Assertion Failures")),
+                    () -> assertTrue(categories.contains("Assertioooon Failures")),
 
                     () -> assertTrue(categories.contains("UI Automation Issues")),
 
