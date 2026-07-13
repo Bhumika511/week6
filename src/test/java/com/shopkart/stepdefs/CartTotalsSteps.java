@@ -24,6 +24,12 @@ public class CartTotalsSteps {
         assertEquals(expectedTotal, cart.totalPaise());
     }
 
+    @Then("the API cart status should be {string}")
+    public void verifyApiCartStatus(int expectedStatus) {
+        Cart cart = cartClient.getCart(context.getToken(), context.getCartId());
+        assertEquals(expectedStatus, cart.status());
+    }
+
     @Then("the database cart total should be {int}")
     public void verifyDatabaseCartTotal(int expectedTotal) {
         assertEquals(expectedTotal, repository.cartTotal(context.getCartId()));

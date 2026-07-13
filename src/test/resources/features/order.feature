@@ -1,4 +1,4 @@
-@smoke
+@bhumi
 Feature: Order
 
   Scenario: Customer places an order
